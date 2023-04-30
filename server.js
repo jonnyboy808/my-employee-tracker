@@ -116,7 +116,7 @@ const addEmployee = () => {
         },
     ])
     .then((answers) => {
-        connection.query(`INSERT INTO employee set ?`,
+        connection.query(`INSERT INTO employee SET ?`,
         {
             first_name: answers.firstName,
             last_name: answers.lastName,
@@ -131,3 +131,52 @@ const addEmployee = () => {
         })
     })
 };
+
+const addRole = () => {
+    inquirer.prompt([
+        {
+            type:'input',
+            message:'What role is being added?',
+            name:'newRole'
+        },
+
+        {
+            type:'input',
+            message:'What is the salary?',
+            name:'salary'
+        }
+    ])
+    .then((answers) => {
+        connection.query(`INSERT INTO employee_role SET ?`,
+        {
+            title: answers.newRole,
+            salary: answers.salary
+        },
+        (err) => {
+            if (err) throw err;
+            console.log('New role added')
+            console.log(answers)
+            valueUpdate()
+        })
+    })
+}
+
+employees = [];
+    const query = `SELECT first_name FROM employee`
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        res.forEach (({first_name}) => {
+            employees.push(first_name);
+        });
+    });
+
+roles = []
+    const query = `SELECT title FROM employee_role`
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        res.forEach(({title}) => {
+            roles.push(title);
+        });
+    });
+
+    
