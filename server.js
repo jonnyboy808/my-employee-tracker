@@ -26,10 +26,10 @@ const valueUpdate = () => {
      .then((answer) => {
         switch(answer.valueUpdate){
             case 'View all Employees':
-                ViewAllEmployees();
+                viewAllEmployees();
                 break;
             case 'View Departments':
-                ViewDepartments();
+                viewDepartments();
                 break;
             case 'Add Department':
                 addDepartment();
@@ -50,17 +50,41 @@ const valueUpdate = () => {
      });
 };
 
-const ViewAllEmployees = () =>{
+const viewAllEmployees = () =>{
 const query = `SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, employee_department.department_name, employee_role.salary, CONCAT(manger.first_name,'', manger.last_name) AS manager
 FROM employee
 LEFT JOIN employee manager ON manager.id = employee.manager_id
 INNER JOIN employee_role ON employee.role_id = employee_role.id 
 INNER JOIN employee_department ON employee_department.id = employee_role.department_id;`
-Connection.query(query, (err, res) =>{
+connection.query(query, (err, res) => {
     if (err) throw err
-    console.log('View all employees')
+    console.log('All employees')
+    console.table(res)
+    valueUpdate()
+})
+};
+
+const viewDepartments = () => {
+const query = `SELECT department_name FROM employee_department`
+connection.query(query, (err, res) => {
+    if (err) throw err
+    console.log('All Departments')
     console.table(res)
     valueUpdate()
 })
 }
 
+const viewRoles = () => {
+    roles = []
+    const query = `SELECT title FROM employee_role`
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        res.forEach(({title}) => {
+            roles.push(title);
+        console.log('All Roles')
+        console.table(res)
+        console.log(roles)
+        valueUpdate()
+        })
+    })
+};
