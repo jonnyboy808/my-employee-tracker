@@ -88,3 +88,46 @@ const viewRoles = () => {
         })
     })
 };
+
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            type:'input',
+            message:'What is the first name?',
+            name:'firstName'
+        },
+
+        {
+            type:'input',
+            message:'What is the last name?',
+            name:'lastName'
+        },
+
+        {
+            type:'input',
+            message:'What is the employees role id?',
+            name:'roleId'
+        },
+
+        {
+            type:'input',
+            message:'What is the employees manager id?',
+            name:'managerId'
+        },
+    ])
+    .then((answers) => {
+        connection.query(`INSERT INTO employee set ?`,
+        {
+            first_name: answers.firstName,
+            last_name: answers.lastName,
+            role_id: answers.roleId,
+            manager_id: answers.managerId
+        },
+        (err) => {
+            if (err) throw err;
+            console.log('Employee added')
+            console.log(answers)
+            valueUpdate()
+        })
+    })
+};
