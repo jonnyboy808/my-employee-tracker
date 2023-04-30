@@ -13,7 +13,6 @@ CREATE TABLE employees (
     PRIMARY KEY (id)
 );
 
--- employee role description table
 CREATE TABLE employee_role (
     id INT(10) AUTO_INCREMENT NOT NULL,
     title VARCHAR(30),
@@ -22,7 +21,6 @@ CREATE TABLE employee_role (
     PRIMARY KEY (id)
 );
 
--- employee department table
 CREATE TABLE employee_department (
     id INT(10) AUTO_INCREMENT NOT NULL,
     department_name VARCHAR(30),

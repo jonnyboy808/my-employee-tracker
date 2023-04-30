@@ -171,12 +171,41 @@ employees = [];
     });
 
 roles = []
-    const query = `SELECT title FROM employee_role`
-    connection.query(query, (err, res) => {
+    const queryTwo = `SELECT title FROM employee_role`
+    connection.query(queryTwo, (err, res) => {
         if (err) throw err;
         res.forEach(({title}) => {
             roles.push(title);
         });
     });
 
-    
+    const updateEmployeeRole = () => {
+        inquirer.prompt([
+            {
+                type:'list',
+                choices: employees,
+                name: 'roleUpdate'
+            },
+
+            {
+                type:'list',
+                message: 'What role would you like?',
+                name: 'newRole'
+            }
+        ])
+        .then((answers) => {
+            connection.query(`UPDATE employee_role SET title = ? WHERE first_name = ?`,
+            {
+                title: answers.newRole,
+                first_name: answers.roleUpdate
+            },
+            (err) => {
+                if (err) throw err;
+                console.log('Employee Role Updated')
+                console.table(answers)
+                valueUpdate
+            })
+        })
+    }
+
+    valueUpdate()
