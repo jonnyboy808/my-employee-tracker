@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS employee_tracker_db;
 CREATE DATABASE employee_tracker_db;
 USE employee_tracker_db;
 
--- table for employees
+-- Creates employee table
 CREATE TABLE employee (
 id INT(11) AUTO_INCREMENT NOT NULL,
 first_name VARCHAR(30),
@@ -12,7 +12,7 @@ manager_id INT(11),
 PRIMARY KEY (id) 
 );
 
--- table for employee roles
+-- Creates roles table
 CREATE TABLE employee_Role (
 id INT(11) AUTO_INCREMENT NOT NULL,
 title VARCHAR(30),
@@ -21,7 +21,7 @@ department_id INT(11),
 PRIMARY KEY (id) 
 );
 
--- table for employee department 
+-- Creates department table
 CREATE TABLE employee_department(
 id INT(11) AUTO_INCREMENT NOT NULL,
 department_name VARCHAR(30),
