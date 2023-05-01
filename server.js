@@ -1,15 +1,18 @@
 const inquirer = require ('inquirer');
 const fs = require ('fs');
 const mysql = require('mysql2');
+require('console.table')
+let employees = [];
+let roles = [];
 
-const db =mysql.createConnection(
+const db = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'employee_tracker_db'
+        database: 'employeeTracker_db'
     },
-    console.log('Connected to the employee_tracker_db database.')
+    console.log('Connected to the employeeTracker_db database.')
 );
 
 const valueUpdate = () => {
@@ -24,7 +27,7 @@ const valueUpdate = () => {
         }
      ])
      .then((answer) => {
-        switch(answer.valueUpdate){
+        switch(answer.choiceUpdate){
             case 'View all Employees':
                 viewAllEmployees();
                 break;
@@ -51,12 +54,12 @@ const valueUpdate = () => {
 };
 
 const viewAllEmployees = () =>{
-const query = `SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, employee_department.department_name, employee_role.salary, CONCAT(manger.first_name,'', manger.last_name) AS manager
+const query = `SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, employee_department.department_name, employee_role.salary, CONCAT(manager.first_name,'', manager.last_name) AS manager
 FROM employee
 LEFT JOIN employee manager ON manager.id = employee.manager_id
 INNER JOIN employee_role ON employee.role_id = employee_role.id 
 INNER JOIN employee_department ON employee_department.id = employee_role.department_id;`
-connection.query(query, (err, res) => {
+db.query(query, (err, res) => {
     if (err) throw err
     console.log('All employees')
     console.table(res)
@@ -66,7 +69,7 @@ connection.query(query, (err, res) => {
 
 const viewDepartments = () => {
 const query = `SELECT department_name FROM employee_department`
-connection.query(query, (err, res) => {
+db.query(query, (err, res) => {
     if (err) throw err
     console.log('All Departments')
     console.table(res)
@@ -77,7 +80,7 @@ connection.query(query, (err, res) => {
 const viewRoles = () => {
     roles = []
     const query = `SELECT title FROM employee_role`
-    connection.query(query, (err, res) => {
+    db.query(query, (err, res) => {
         if (err) throw err;
         res.forEach(({title}) => {
             roles.push(title);
@@ -113,10 +116,10 @@ const addEmployee = () => {
             type:'input',
             message:'What is the employees manager id?',
             name:'managerId'
-        },
+        }
     ])
     .then((answers) => {
-        connection.query(`INSERT INTO employee SET ?`,
+        db.query(`INSERT INTO employee SET ?`,
         {
             first_name: answers.firstName,
             last_name: answers.lastName,
@@ -126,7 +129,29 @@ const addEmployee = () => {
         (err) => {
             if (err) throw err;
             console.log('Employee added')
-            console.log(answers)
+            console.table(answers)
+            valueUpdate()
+        })
+    })
+};
+
+const addDepartment = () => {
+    inquirer.prompt([
+        {
+        type: 'input',
+        message: 'What department should be added?',
+        name: 'newDept'
+        }
+    ])
+    .then((answers) => {
+        db.query(`INSERT INTO employee_department SET ?`,
+        {
+            department_name: answers.newDept
+        },
+        (err) => {
+            if (err) throw err;
+            console.log('New department added')
+            console.table(answers)
             valueUpdate()
         })
     })
@@ -147,7 +172,7 @@ const addRole = () => {
         }
     ])
     .then((answers) => {
-        connection.query(`INSERT INTO employee_role SET ?`,
+        db.query(`INSERT INTO employee_role SET ?`,
         {
             title: answers.newRole,
             salary: answers.salary
@@ -162,8 +187,8 @@ const addRole = () => {
 }
 
 employees = [];
-    const query = `SELECT first_name FROM employee`
-    connection.query(query, (err, res) => {
+    const query = `SELECT first_name FROM employee`;
+    db.query(query, (err, res) => {
         if (err) throw err;
         res.forEach (({first_name}) => {
             employees.push(first_name);
@@ -172,7 +197,7 @@ employees = [];
 
 roles = []
     const queryTwo = `SELECT title FROM employee_role`
-    connection.query(queryTwo, (err, res) => {
+    db.query(queryTwo, (err, res) => {
         if (err) throw err;
         res.forEach(({title}) => {
             roles.push(title);
@@ -183,6 +208,7 @@ roles = []
         inquirer.prompt([
             {
                 type:'list',
+                message: 'Which employee should be added?',
                 choices: employees,
                 name: 'roleUpdate'
             },
@@ -190,11 +216,12 @@ roles = []
             {
                 type:'list',
                 message: 'What role would you like?',
+                choices: roles,
                 name: 'newRole'
             }
         ])
         .then((answers) => {
-            connection.query(`UPDATE employee_role SET title = ? WHERE first_name = ?`,
+            db.query(`UPDATE employee_role SET title = ? WHERE first_name = ?`,
             {
                 title: answers.newRole,
                 first_name: answers.roleUpdate
