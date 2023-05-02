@@ -60,18 +60,18 @@ const valueUpdate = () => {
 };
 // function that displays all employee information in a table
 const viewAllEmployees = () =>{
-const query = `SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, employee_department.department_name, employee_role.salary, CONCAT(manager.first_name,' ', manager.last_name) AS manager
-FROM employee 
-LEFT JOIN employee manager ON manager.id = employee.manager_id
-INNER JOIN employee_role ON employee.role_id = employee_role.id
-INNER JOIN employee_department ON employee_department.id = employee_role.department_id`;
-connection.query(query, (err, res) =>{
-    if (err) throw err;
-    console.log('Viewing all employees');
-    console.table(res);
-    valueUpdate();
-   });
-};
+  const query = `SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, employee_department.department_name, employee_role.salary, CONCAT(manager.first_name,' ', manager.last_name) AS manager
+  FROM employee 
+  LEFT JOIN employee manager ON manager.id = employee.manager_id
+  INNER JOIN employee_role ON employee.role_id = employee_Role.id
+  INNER JOIN employee_department ON employee_department.id = employee_role.department_id`;
+  connection.query(query, (err, res) =>{
+      if (err) throw err;
+      console.log('Viewing all employees');
+      console.table(res);
+      valueUpdate();
+     });
+  };
 // function display all departments
 const viewDepartments = () => {
   const query = `SELECT id, department_name
