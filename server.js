@@ -113,9 +113,9 @@ const viewRoles = () => {
   INNER JOIN employee_department ON employee_role.department_id = employee_department.id;`;
   connection.query(query, (err, res) => {
     if (err) throw err;
-    // res.forEach(({title}) => {
-    //   roles.push(title);
-    // });
+    res.forEach(({title}) => {
+      roles.push(title);
+    });
     console.log('Viewing all roles');
     console.table(res);
     valueUpdate();
@@ -178,8 +178,8 @@ const updateEmployeeRole = () => {
      console.table(answers)
      valueUpdate()
     })
-  })
-}
+  });
+};
 // function to add new employee
 const addEmployee = () => {
   inquirer

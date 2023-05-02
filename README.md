@@ -5,9 +5,7 @@
 
 ## Links
 
-Repo:
-
-[Employee Tracker](https://github.com/jonnyboy808/my-employee-tracker)
+[Walkthrough Video](https://drive.google.com/file/d/18WBr8RQV13kEfQv5ofctMnUrrCUSzSpj/view)
 
 ## Table of Contents
 

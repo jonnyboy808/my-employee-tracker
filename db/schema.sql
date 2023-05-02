@@ -27,11 +27,3 @@ id INT(11) AUTO_INCREMENT NOT NULL,
 department_name VARCHAR(30),
 PRIMARY KEY (id) 
 );
-
--- CREATE TABLE employee_info (
---   id INT(11) AUTO_INCREMENT NOT NULL,
---   title VARCHAR(30),
---   department_name VARCHAR(30),
---   role_id INT(11),
---   PRIMARY KEY (id)
--- );
