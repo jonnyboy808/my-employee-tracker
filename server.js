@@ -25,15 +25,7 @@ const valueUpdate = () => {
             type: 'list',
             name: 'choiceUpdate',
             message: "What would you like to do?",
-            choices:['View all Employees', 
-                      'View Departments',
-                      'Add Departments',
-                      'View Roles', 
-                      'Add Roles',
-                      'Update Employee Role',
-                      'Add Employee',
-                      'Exit Application'
-                    ]
+            choices:['View all Employees', 'View Departments', 'Add Departments', 'View Roles', 'Add Roles', 'Update Employee Role', 'Add Employee', 'Exit Application']
         }
     ])
     // allows each choice to be called for use
@@ -68,7 +60,7 @@ const valueUpdate = () => {
 };
 // function that displays all employee information in a table
 const viewAllEmployees = () =>{
-const query = `SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, employee_department.department_name, employee_role.salary, CONCAT(manager.first_name,'', manager.last_name) AS manager
+const query = `SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, employee_department.department_name, employee_role.salary, CONCAT(manager.first_name,' ', manager.last_name) AS manager
 FROM employee 
 LEFT JOIN employee manager ON manager.id = employee.manager_id
 INNER JOIN employee_role ON employee.role_id = employee_role.id
@@ -90,7 +82,28 @@ const viewDepartments = () => {
     valueUpdate();
   });
 };
-
+// function to add new department
+const addDepartment = () =>{
+    inquirer.prompt([
+      {
+        type: 'input',
+        message: 'What department would you like to add?',
+        name: 'newDept'
+      }
+    ])
+    .then((answers) => {
+      connection.query(`INSERT INTO employee_department SET ?`,
+      {
+        department_name: answers.newDept
+      },
+      (err) => {
+        if (err) throw err;
+        console.log('Added new Department')
+        console.table(answers)
+        valueUpdate()
+      })
+    })
+  };
 //  function display all roles
 const viewRoles = () => {
   roles = [];
@@ -105,6 +118,65 @@ const viewRoles = () => {
     valueUpdate();
     });  
 };
+// function to add new role
+const addRoles = () =>{
+    inquirer
+    .prompt([
+      {
+        type: 'input',
+        message: 'What role would you like to add?',
+        name: 'newRole'
+      },
+      {
+        type: 'input',
+        message: 'What is the salary?',
+        name: 'salary'
+      }
+    ])
+    .then((answers)=> {
+      connection.query(`INSERT INTO employee_role SET ?`,
+      {
+        title: answers.newRole,
+        salary: answers.salary
+      },
+      (err) => {
+        if (err) throw err;
+        console.log('Added new Role')
+        console.table(answers)
+        valueUpdate()
+      })
+    })
+  };
+// function updates employee role 
+const updateEmployeeRole = () => {
+    inquirer.prompt([
+    {
+      type: 'list',
+      message: 'Which employee would you like to update?',
+      choices: employees,
+      name: 'roleUpdate'
+    },
+    {
+      type: 'list',
+      message: 'What would you like for the new role',
+      choices: roles,
+      name: 'newRole'
+    }
+  ])
+  .then((answers)=>{
+    connection.query(`UPDATE employee_role SET title = ? WHERE first_name = ?`,
+    {
+      title: answers.newRole,
+      first_name: answers.roleUpdate
+    },
+    (err) => {
+     if (err) throw err;
+     console.log('Updated Employee Role')
+     console.table(answers)
+     valueUpdate()
+    })
+  })
+}
 // function to add new employee
 const addEmployee = () => {
   inquirer
@@ -146,57 +218,6 @@ const addEmployee = () => {
     })
   })
 };
-// function to add new department
-const addDepartment = () =>{
-  inquirer.prompt([
-    {
-      type: 'input',
-      message: 'What department would you like to add?',
-      name: 'newDept'
-    }
-  ])
-  .then((answers) => {
-    connection.query(`INSERT INTO employee_department SET ?`,
-    {
-      department_name: answers.newDept
-    },
-    (err) => {
-      if (err) throw err;
-      console.log('Added new Department')
-      console.table(answers)
-      valueUpdate()
-    })
-  })
-};
-// function to add new role
-const addRoles = () =>{
-  inquirer
-  .prompt([
-    {
-      type: 'input',
-      message: 'What role would you like to add?',
-      name: 'newRole'
-    },
-    {
-      type: 'input',
-      message: 'What is the salary?',
-      name: 'salary'
-    }
-  ])
-  .then((answers)=> {
-    connection.query(`INSERT INTO employee_role SET ?`,
-    {
-      title: answers.newRole,
-      salary: answers.salary
-    },
-    (err) => {
-      if (err) throw err;
-      console.log('Added new Role')
-      console.table(answers)
-      valueUpdate()
-    })
-  })
-};
 // push into empty employee array 
 employees = [];
    const query = 'SELECT first_name FROM employee';
@@ -206,7 +227,6 @@ employees = [];
             employees.push(first_name);
         });
     });
-
 // push into empty roles array 
 roles = [];
     const queryTwo = `SELECT title FROM employee_role`
@@ -216,34 +236,5 @@ roles = [];
         roles.push(title);
     });
  });
-// function updates employee role 
-const updateEmployeeRole = () =>{
-    inquirer.prompt([
-    {
-      type: 'list',
-      message: 'Which employee would you like to update?',
-      choices: employees,
-      name: 'roleUpdate'
-    },
-    {
-      type: 'list',
-      message: 'What would you like for the new role',
-      choices: roles,
-      name: 'newRole'
-    }
-  ])
-  .then((answers)=>{
-    connection.query(`UPDATE employee_role SET title = ? WHERE first_name = ?`,
-    {
-      title: answers.newRole,
-      first_name: answers.roleUpdate
-    },
-    (err) => {
-     if (err) throw err;
-     console.log('Updated Employee Role')
-     console.table(answers)
-     valueUpdate()
-    })
-  })
-}
+
 valueUpdate()
