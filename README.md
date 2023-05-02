@@ -14,7 +14,7 @@ Repo:
 * [Description](#description)
 * [Installation](#installation)
 * [Code Example](#code-example)
-* [Notes Landing Page](#notes-landing-page)
+* [Application Examples](#application-examples)
 * [Usage](#usage)
 * [License](#license)
 * [Questions](#questions)
@@ -51,13 +51,20 @@ INNER JOIN employee_department ON employee_department.id = employee_role.departm
 ```
 
 
-## Notes Landing Page
-Bellow is a screenshot of the landing page
+## Application Examples
+Bellow are a couple examples of the application when in use
 
-![Notes landing page](./assets/images/notes-page.png)
+The first example shows the list that it prompted when the application is first ran.
+![List Example](./assets/images/list-example.png)
+
+---
+
+The second screenshot is an example of a table displaying all employees and information.
+
+![Table Example](./assets/images/table-example.png)
 
 ## Usage
-Make sure you have followed the instructions within the [Installation](#installation) section of the README to start using the application, if not already done so.
+Make sure you have followed the instructions within the [Installation](#installation) section of the README to start using the application, if not already done so. After starting the application within your command line interface, you can start adding, updating, and viewing all employees by using mysql. To get started run the schema and seed sql to build the database. After the build run server.js to initialize the prompts. From here you can use the options to update your own employee list. When done, simply navigate to the 'Exit Application' option and the employee tracker application will close out.
 
 
 

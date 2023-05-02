@@ -24,7 +24,7 @@ const valueUpdate = () => {
         {
             type: 'list',
             name: 'choiceUpdate',
-            message: "What would you like to do?",
+            message: "Please select an option.",
             choices:['View all Employees', 'View Departments', 'Add Departments', 'View Roles', 'Add Roles', 'Update Employee Role', 'Add Employee', 'Exit Application']
         }
     ])
@@ -67,7 +67,7 @@ INNER JOIN employee_role ON employee.role_id = employee_role.id
 INNER JOIN employee_department ON employee_department.id = employee_role.department_id`;
 connection.query(query, (err, res) =>{
     if (err) throw err;
-    console.log("Viewing all employees");
+    console.log('Viewing all employees');
     console.table(res);
     valueUpdate();
    });
@@ -77,7 +77,7 @@ const viewDepartments = () => {
   const query = `SELECT department_name FROM employee_department`;
   connection.query(query, (err, res) => {
     if (err) throw err;
-    console.log('Viewing all Departments');
+    console.log('Viewing all departments');
     console.table(res);
     valueUpdate();
   });
@@ -87,7 +87,7 @@ const addDepartment = () =>{
     inquirer.prompt([
       {
         type: 'input',
-        message: 'What department would you like to add?',
+        message: 'Please enter the new department.',
         name: 'newDept'
       }
     ])
@@ -98,7 +98,7 @@ const addDepartment = () =>{
       },
       (err) => {
         if (err) throw err;
-        console.log('Added new Department')
+        console.log('New department added')
         console.table(answers)
         valueUpdate()
       })
@@ -113,7 +113,7 @@ const viewRoles = () => {
     // res.forEach(({title}) => {
     //   roles.push(title);
     // });
-    console.log('Viewing all Roles');
+    console.log('Viewing all roles');
     console.table(res);
     valueUpdate();
     });  
@@ -124,12 +124,12 @@ const addRoles = () =>{
     .prompt([
       {
         type: 'input',
-        message: 'What role would you like to add?',
+        message: 'Please enter the new role.',
         name: 'newRole'
       },
       {
         type: 'input',
-        message: 'What is the salary?',
+        message: 'Enter the salary for the new role.',
         name: 'salary'
       }
     ])
@@ -141,7 +141,7 @@ const addRoles = () =>{
       },
       (err) => {
         if (err) throw err;
-        console.log('Added new Role')
+        console.log('New role added')
         console.table(answers)
         valueUpdate()
       })
@@ -152,13 +152,13 @@ const updateEmployeeRole = () => {
     inquirer.prompt([
     {
       type: 'list',
-      message: 'Which employee would you like to update?',
+      message: 'Which employee should be updated?',
       choices: employees,
       name: 'roleUpdate'
     },
     {
       type: 'list',
-      message: 'What would you like for the new role',
+      message: 'What should be the new role?',
       choices: roles,
       name: 'newRole'
     }
@@ -171,7 +171,7 @@ const updateEmployeeRole = () => {
     },
     (err) => {
      if (err) throw err;
-     console.log('Updated Employee Role')
+     console.log('Employee role updated')
      console.table(answers)
      valueUpdate()
     })
@@ -183,12 +183,12 @@ const addEmployee = () => {
   .prompt([
     {
       type: 'input',
-      message: 'What is employees first name?',
+      message: 'Please enter employees first name.',
       name: 'firstName'
     },
     { 
       type: 'input',
-      message: 'What is employees last name?',
+      message: 'Please enter employees last name.',
       name: 'lastName'
     },
     {
@@ -212,7 +212,7 @@ const addEmployee = () => {
     },
     (err) => {
       if (err) throw err;
-      console.log('Added employee')
+      console.log('Employee Added')
       console.table(answers)
       valueUpdate()
     })
