@@ -74,7 +74,8 @@ connection.query(query, (err, res) =>{
 };
 // function display all departments
 const viewDepartments = () => {
-  const query = `SELECT department_name FROM employee_department`;
+  const query = `SELECT id, department_name
+  FROM employee_department`;
   connection.query(query, (err, res) => {
     if (err) throw err;
     console.log('Viewing all departments');
@@ -107,7 +108,9 @@ const addDepartment = () =>{
 //  function display all roles
 const viewRoles = () => {
   roles = [];
-  const query = `SELECT title FROM employee_role`;
+  const query = `SELECT employee_role.title, employee_department.department_name, employee_role.id
+  FROM employee_role
+  INNER JOIN employee_department ON employee_role.department_id = employee_department.id;`;
   connection.query(query, (err, res) => {
     if (err) throw err;
     // res.forEach(({title}) => {

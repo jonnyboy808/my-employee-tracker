@@ -1,5 +1,5 @@
 INSERT INTO employee(first_name, last_name, role_id, manager_id)
-VALUES ('Coleman', 'Atwood', 6, null), ('Jane', 'Montiel', 2, null), ('Marlene', 'Jacobs', 5, null), ('Eliza', 'Johnston', 7, 1), ('Steve', 'Hilbert', 4, 7), ('Robert', 'Nichols', 1, 2), ('Phillip', 'Kirkpatrick', 3, null), ('Joan', 'Buckner', 4, 7);
+VALUES ('Coleman', 'Atwood', 6, null), ('Jane', 'Montiel', 2, null), ('Marlene', 'Jacobs', 5, null), ('Eliza', 'Johnston', 7, 1), ('Steve', 'Hilbert', 4, ), ('Robert', 'Nichols', 1, 2), ('Phillip', 'Kirkpatrick', 3, null), ('Joan', 'Buckner', 4, 7);
 
 INSERT INTO employee_role(title, salary, department_id)
 VALUES ('Sales Associate', 75000, 1), ('Supervisor', 90000, 1), ('Lead Engineer', 250000, 2), ('Software Engineer', 160000, 2), ('Accountant', 120000, 3), ('Recruiter Team Lead', 180000, 4), ('Recruiter', 150000, 4);
@@ -15,4 +15,13 @@ INNER JOIN employee_department ON employee_department.id = employee_role.departm
 
 SELECT department_name FROM employee_department;
 
+SELECT id, department_name
+FROM employee_department;
+
 SELECT title FROM employee_role;
+
+SELECT employee_role.title, employee_role.id,  employee_department.department_name
+FROM employee_role
+INNER JOIN employee_department ON employee_role.department_id = employee_department.id;
+
+
